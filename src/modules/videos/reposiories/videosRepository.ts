@@ -45,8 +45,8 @@ class VideoRepository {
         pool.getConnection((err: any, connection: any) => {
 
             connection.query(
-                'SELECT * FROM videos WHERE title LIKE ?',
-                [`%${search}%`],
+                'SELECT * FROM videos WHERE title LIKE ? OR description LIKE ?',
+                [`%${search}%`, `%${search}%`],
                 (error: any, results: any, fields: any) => {
                     connection.release();
                     if (error) {
