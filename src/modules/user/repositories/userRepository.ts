@@ -12,6 +12,22 @@ class UserRepository {
                 if (err){
                     return response.status(500).json({err});
                 }
+
+                connection.query(
+                    'SELECT email FROM users WHERE email = ?',
+                    [email],
+                    (error: any, result: any, field: any) => {
+                        if(error) {
+                            connection.release();
+                            return response.status(500).json(error);
+                        }
+
+                        if (result.length > 0) {
+                            connection.release();
+                            return response.status(409).json({message: "Email ja está em uso"})
+                        }
+                    }
+                )
                 
                 connection.query(
                     'INSERT INTO users (user_id, name, email, password) VALUES (?,?,?,?)',
